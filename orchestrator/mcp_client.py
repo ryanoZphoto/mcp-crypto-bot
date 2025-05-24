@@ -8,7 +8,7 @@ import os
 import asyncio
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
-from orchestrator.integrations.slack import send_slack_message
+
 
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
 
@@ -24,5 +24,4 @@ async def get_coin_price(symbol="BTC"):
             await session.initialize()
             result = await session.call_tool("get_coin_price", {"symbol": symbol})
             value = getattr(result.content, "text", result.content)
-            print("DEBUG: result.content =", result.content, "value =", value)
             return [symbol, value]

@@ -38,8 +38,7 @@ mcp/
 
 ---
 
-## Environment Variables (`.env`)
-Copy `.env.example` to `.env` in the project root and fill in your secrets. The required variables are:
+
 
 ```
 binanceusdt_api_key=YOUR_BINANCE_API_KEY
@@ -83,7 +82,7 @@ SLACK_APP_TOKEN=...
    ```sh
    pip install -r requirements.txt
    ```
-2. **Set up your `.env` file** (see above).
+2. **Set up your `.env` file** by copying `.env.example` and adding your secrets.
 3. **Start everything (Windows):**
    ```powershell
    ./start_all.ps1
