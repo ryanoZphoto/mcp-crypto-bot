@@ -6,4 +6,9 @@ node_modules/
 *.db
 .idea/
 .vscode/
-.DS_Store 
+.DS_Store
+# Ignore log files and sensitive data
+*.log
+logs/
+bot_logs_*.json
+meta mask.txt
