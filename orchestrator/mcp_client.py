@@ -4,11 +4,13 @@ MCP Client integration for orchestrator.
 This module connects to a real MCP server using the official Python SDK.
 """
 
+import os
 import asyncio
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
+from orchestrator.integrations.slack import send_slack_message
 
-MCP_SERVER_URL = "http://127.0.0.1:8000/mcp"
+MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
 
 COINS = ["BTC", "ETH", "SOL", "DOGE", "ADA"]
 
@@ -24,8 +26,3 @@ async def get_coin_price(symbol="BTC"):
             value = getattr(result.content, "text", result.content)
             print("DEBUG: result.content =", result.content, "value =", value)
             return [symbol, value]
-
-def send_slack_message(message):
-    """Simulate sending a message to Slack via MCP (still a stub for demo)."""
-    print(f"Sent to Slack: {message}")
-    return True 

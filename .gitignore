@@ -6,4 +6,9 @@ node_modules/
 *.db
 .idea/
 .vscode/
-.DS_Store 
+.DS_Store
+*.log
+logs/
+meta mask.txt
+diagnostic.html
+test_chart.html
