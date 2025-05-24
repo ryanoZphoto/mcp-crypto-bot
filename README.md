@@ -39,7 +39,7 @@ mcp/
 ---
 
 ## Environment Variables (`.env`)
-Create a `.env` file in the project root with the following:
+Copy `.env.example` to `.env` and fill in your credentials:
 
 ```
 binanceusdt_api_key=YOUR_BINANCE_API_KEY
@@ -83,7 +83,7 @@ slack_app_token=...
    ```sh
    pip install -r requirements.txt
    ```
-2. **Set up your `.env` file** (see above).
+2. **Set up your `.env` file** by copying `.env.example` and adding your secrets.
 3. **Start everything (Windows):**
    ```powershell
    ./start_all.ps1
@@ -101,6 +101,14 @@ slack_app_token=...
 - **All bot actions, trades, and errors** are logged in memory and displayed in the dashboard (auto-refreshes every 10 seconds).
 - **Slack notifications**: Every log entry is also sent to your configured Slack channel.
 - **Logs are not persisted across restarts** (for persistent logging, extend to file or database).
+
+## Running Tests
+Install dependencies first, then execute the test suite with `pytest`:
+
+```sh
+pip install -r requirements.txt
+pytest
+```
 
 ---
 

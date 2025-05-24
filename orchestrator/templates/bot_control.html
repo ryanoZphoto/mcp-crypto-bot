@@ -6,25 +6,37 @@
     <style>
         body { 
             font-family: Arial, sans-serif; 
-            background: #f8f9fa; 
+            background: #f3f5f7; 
             margin: 0; 
             padding: 0; 
             color: #333;
         }
         .container { 
             max-width: 1200px; 
-            margin: 40px auto; 
+            margin: 20px auto; 
             background: #fff; 
             padding: 32px; 
-            border-radius: 12px; 
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            border-radius: 16px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         h1 { 
-            color: #333; 
+            color: #1a3b5d; 
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 2px solid #f0f2f5;
             font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #version-tag {
+            font-size: 14px;
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
         }
         
         /* Dashboard layout */
@@ -37,108 +49,294 @@
         .chart-section {
             grid-column: 1 / -1;
             margin-bottom: 25px;
-            padding: 20px;
-            background: #fcfcfc;
-            border-radius: 12px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            padding: 24px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #f0f2f5;
+        }
+        
+        .chart-section h2 {
+            margin-top: 0;
+            color: #1a3b5d;
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .symbol-tag {
+            font-size: 14px;
+            background: #f0f2f5;
+            color: #5c6b7c;
+            padding: 4px 10px;
+            border-radius: 8px;
+            margin-left: 12px;
+            font-weight: normal;
         }
         
         .chart-container {
             position: relative;
-            height: 400px;
+            height: 500px; /* Increased height for better visibility */
             width: 100%;
-            margin-bottom: 20px;
-            border: 1px solid #eee;
-            background-color: #fcfcfc;
+            margin-bottom: 24px;
+            border: 1px solid #eaeff4;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+        }
+        
+        /* Enhanced metrics display */
+        .trade-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 20px 16px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #f0f2f5;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #5c6b7c;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            font-weight: 600;
+        }
+        
+        .metric-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a3b5d;
+            margin-bottom: 12px;
+        }
+        
+        .metric-card .explanation {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #8394a7;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        
+        .metric-card.price .value { color: #0077cc; }
+        .metric-card.volatility .value { color: #e67e22; }
+        
+        /* Live indicator */
+        .live-indicator {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .live-indicator.on {
+            background-color: rgba(0, 200, 0, 0.15);
+            color: #16a34a;
+            border: 1px solid rgba(0, 150, 0, 0.2);
+        }
+        
+        .live-indicator.off {
+            background-color: rgba(200, 0, 0, 0.15);
+            color: #dc2626;
+            border: 1px solid rgba(150, 0, 0, 0.2);
+            display: none;
+        }
+        
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .live-indicator.on .live-dot {
+            background-color: #16a34a;
+            animation: pulse 1.5s infinite;
         }
         
         /* Controls section */
         .controls-section {
-            background: #fcfcfc;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            background: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #f0f2f5;
         }
         
         .bot-status-display {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 20px;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 12px;
             text-align: center;
-            background: #f8f8f8;
+            background: #f8fafc;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #eaeff4;
         }
         
         .bot-status-display.running {
-            color: #007700;
-            background: rgba(0, 200, 0, 0.1);
+            color: #16a34a;
+            background: rgba(0, 200, 0, 0.08);
+            border-color: rgba(0, 150, 0, 0.2);
         }
         
         .bot-status-display.stopped {
-            color: #b00020;
-            background: rgba(200, 0, 0, 0.1);
+            color: #dc2626;
+            background: rgba(220, 38, 38, 0.08);
+            border-color: rgba(220, 38, 38, 0.2);
         }
         
-        .controls-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .button-row {
+            display: flex;
+            gap: 12px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .run-btn {
+            background: #0284c7;
+            color: white;
+        }
+        
+        .run-btn:hover {
+            background: #0369a1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+        
+        .stop-btn {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .stop-btn:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+        }
+        
+        .refresh-btn {
+            background: #7c3aed;
+            color: white;
+        }
+        
+        .refresh-btn:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+        }
+        
+        /* Status messages */
         .status-messages {
             margin-top: 20px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            border-left: 4px solid #ddd;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #cbd5e1;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         
         /* Logs section */
         .logs-section {
-            background: #fcfcfc;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            background: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #f0f2f5;
+        }
+        
+        /* Enhanced logs */
+        .logs { 
+            border-radius: 12px; 
+            background: #1e1e2d;
+            color: #f4f4f4;
+            position: relative;
+            min-height: 450px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
         }
         
         /* Metrics display */
         .trade-metrics {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
+            gap: 20px;
             margin-top: 20px;
         }
         
         .metric-card {
             text-align: center;
-            padding: 15px 10px;
+            padding: 20px 15px;
             border-radius: 8px;
             background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
         
         .metric-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 13px;
-            color: #666;
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #555;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.7px;
+            font-weight: 600;
         }
         
         .metric-card .value {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             color: #333;
+            margin-bottom: 10px;
         }
         
         .metric-card .explanation {
-            margin-top: 5px;
-            font-size: 11px;
+            margin-top: 10px;
+            font-size: 12px;
             color: #777;
             font-style: italic;
-            line-height: 1.3;
+            line-height: 1.4;
         }
         
         .metric-card.price .value { color: #0077cc; }
@@ -239,8 +437,8 @@
         /* Live indicator */
         .live-indicator {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             padding: 6px 12px;
             border-radius: 16px;
             font-size: 12px;
@@ -248,22 +446,26 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .live-indicator.on {
             background-color: rgba(0, 200, 0, 0.2);
             color: #007700;
+            border: 1px solid rgba(0, 150, 0, 0.3);
         }
         
         .live-indicator.off {
             background-color: rgba(200, 0, 0, 0.2);
             color: #b00020;
+            border: 1px solid rgba(150, 0, 0, 0.3);
             display: none;
         }
         
         .live-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
         }
         
@@ -482,6 +684,145 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        
+        /* Enhanced trade info section */
+        .trade-info-panel {
+            background: #fcfcfc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            margin-top: 25px;
+        }
+        
+        .trade-info-panel h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .trade-config-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .trade-config-table th,
+        .trade-config-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .trade-config-table th {
+            font-weight: 600;
+            color: #555;
+            background: #f5f5f5;
+        }
+        
+        .trade-info-panel .value-highlight {
+            font-weight: bold;
+            color: #0077cc;
+        }
+        
+        .trade-info-panel .demo-badge,
+        .trade-info-panel .live-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .trade-info-panel .demo-badge {
+            background: #f0f7ff;
+            color: #0077cc;
+            border: 1px solid #0077cc;
+        }
+        
+        .trade-info-panel .live-badge {
+            background: #fff0f0;
+            color: #cc0000;
+            border: 1px solid #cc0000;
+        }
+        
+        /* Order history panel */
+        .order-history {
+            margin-top: 15px;
+        }
+        
+        .order-history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .order-history th,
+        .order-history td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-history th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .buy-order {
+            color: #00aa00;
+        }
+        
+        .sell-order {
+            color: #cc0000;
+        }
+        
+        /* Strategy explanation section */
+        .strategy-panel {
+            background: #fcfcfc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            margin-top: 25px;
+        }
+        
+        .strategy-panel h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .strategy-explanation {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .strategy-text {
+            flex: 1;
+        }
+        
+        .strategy-diagram {
+            flex: 1;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fff;
+        }
+        
+        .strategy-rules {
+            margin-top: 15px;
+        }
+        
+        .strategy-rules li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
@@ -496,12 +837,22 @@
         let viewingHistory = false;
         
         function renderChart(data) {
-            // Reduced console logging
-            
             // Get the canvas element
             const canvas = document.getElementById('priceChart');
             if (!canvas) {
                 console.error("Chart canvas element NOT FOUND!");
+                
+                // Check if we need to create the canvas
+                const chartContainer = document.getElementById('price-chart');
+                if (chartContainer) {
+                    console.log("Creating new canvas element for chart");
+                    const newCanvas = document.createElement('canvas');
+                    newCanvas.id = 'priceChart';
+                    chartContainer.innerHTML = ''; // Clear any existing content
+                    chartContainer.appendChild(newCanvas);
+                    renderChart(data); // Try again with the new canvas
+                    return;
+                }
                 return;
             }
             
@@ -521,9 +872,16 @@
             // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Check if we have no data (either explicitly flagged or empty arrays)
-            if (!data || data.no_data === true || !data.prices || !Array.isArray(data.prices) || data.prices.length === 0) {
-                console.log("No data available for chart");
+            // More robust check for valid data
+            const hasValidData = data && 
+                              data.prices && 
+                              Array.isArray(data.prices) && 
+                              data.prices.length > 0 &&
+                              data.prices.some(price => price !== null && price !== undefined);
+            
+            // Check if we have no data or invalid data
+            if (!hasValidData || data.no_data === true) {
+                console.log("No valid data available for chart");
                 // Draw a message on the canvas
                 ctx.font = '18px Arial';
                 ctx.fillStyle = '#666';
@@ -538,6 +896,18 @@
                 
                 // Also update metrics to show no data
                 try {
+                    // Update new metric elements
+                    const currentPrice = document.getElementById('current-price');
+                    const shortMa = document.getElementById('short-ma');
+                    const longMa = document.getElementById('long-ma');
+                    const volatility = document.getElementById('volatility');
+                    
+                    if (currentPrice) currentPrice.textContent = '--';
+                    if (shortMa) shortMa.textContent = '--';
+                    if (longMa) longMa.textContent = '--';
+                    if (volatility) volatility.textContent = '--';
+                    
+                    // Also try updating old metric elements for backward compatibility
                     const metricsPrice = document.getElementById('metrics-price');
                     const metricsVolatility = document.getElementById('metrics-volatility');
                     const metricsSignal = document.getElementById('metrics-signal');
@@ -552,53 +922,145 @@
                 return;
             }
             
-            // Create a simple array of indices for labels if no timestamps
-            const labels = data.timestamps && data.timestamps.length > 0 ? 
-                data.timestamps.map(ts => new Date(ts).toLocaleTimeString()) : 
-                Array.from({ length: data.prices.length }, (_, i) => i);
+            // Improve data visualization by reducing the number of data points if there are too many
+            let displayPrices = data.prices;
+            let displayTimestamps = data.timestamps;
+            let displayShortMa = data.short_ma;
+            let displayLongMa = data.long_ma;
+            let displaySignals = data.signals;
             
-            // Create datasets array
+            // If we have more than 30 data points, sample for better visualization
+            const maxDataPoints = 30;
+            if (data.prices && data.prices.length > maxDataPoints) {
+                // Calculate the interval to take samples - ensure we include the most recent data
+                const interval = Math.ceil(data.prices.length / maxDataPoints);
+                
+                // Create arrays with sampled data
+                displayPrices = [];
+                displayTimestamps = [];
+                
+                // Always include the first and last few points, and sample in between
+                for (let i = 0; i < data.prices.length; i++) {
+                    // Always include the first few and last points
+                    if (i < 2 || i > data.prices.length - 8 || i % interval === 0) {
+                        displayPrices.push(data.prices[i]);
+                        if (data.timestamps && data.timestamps[i]) {
+                            displayTimestamps.push(data.timestamps[i]);
+                        }
+                    }
+                }
+                
+                // Sample the moving averages similarly
+                if (data.short_ma && data.short_ma.length > 0) {
+                    displayShortMa = [];
+                    for (let i = 0; i < data.short_ma.length; i++) {
+                        if (i < 2 || i > data.short_ma.length - 8 || i % interval === 0) {
+                            displayShortMa.push(data.short_ma[i]);
+                        }
+                    }
+                }
+                
+                if (data.long_ma && data.long_ma.length > 0) {
+                    displayLongMa = [];
+                    for (let i = 0; i < data.long_ma.length; i++) {
+                        if (i < 2 || i > data.long_ma.length - 8 || i % interval === 0) {
+                            displayLongMa.push(data.long_ma[i]);
+                        }
+                    }
+                }
+            }
+            
+            // Create readable time labels from timestamps
+            let labels = [];
+            if (displayTimestamps && displayTimestamps.length > 0) {
+                labels = displayTimestamps.map(ts => {
+                    if (!ts) return '';
+                    
+                    // Handle different timestamp formats
+                    let date;
+                    if (typeof ts === 'number') {
+                        // Handle millisecond timestamps
+                        if (ts > 1000000000000) {  // If timestamp is in milliseconds (13 digits)
+                            date = new Date(ts);
+                        } else {  // If timestamp is in seconds (10 digits)
+                            date = new Date(ts * 1000);
+                        }
+                        
+                        // Validate the date is reasonable (between 2020 and 2030)
+                        const year = date.getFullYear();
+                        if (year < 2020 || year > 2030) {
+                            console.warn(`Suspicious timestamp value: ${ts} converted to ${date.toString()}`);
+                            return '??:??';
+                        }
+                    } else if (typeof ts === 'string') {
+                        // Try to parse string timestamp
+                        date = new Date(ts);
+                    } else {
+                        return '';
+                    }
+                    
+                    // Format as HH:MM
+                    return date.getHours().toString().padStart(2, '0') + ':' + 
+                           date.getMinutes().toString().padStart(2, '0');
+                });
+            } else {
+                // If no timestamps, create sequential labels
+                labels = Array.from({ length: displayPrices.length }, (_, i) => i.toString());
+            }
+            
+            // Create datasets array with improved styling
             const datasets = [
                 {
                     label: 'Price',
-                    data: data.prices,
+                    data: displayPrices,
                     borderColor: 'rgb(0, 119, 204)',
                     backgroundColor: 'rgba(0, 119, 204, 0.1)',
                     borderWidth: 2,
-                    tension: 0.1
+                    tension: 0.2,
+                    fill: false
                 }
             ];
             
             // Add short MA if available
-            if (data.short_ma && data.short_ma.length > 0) {
+            if (displayShortMa && displayShortMa.length > 0) {
                 datasets.push({
                     label: 'Short MA',
-                    data: data.short_ma,
+                    data: displayShortMa,
                     borderColor: 'rgb(0, 204, 119)',
                     backgroundColor: 'rgba(0, 204, 119, 0.1)',
-                    borderWidth: 1,
-                    tension: 0.1
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: false
                 });
             }
             
             // Add long MA if available
-            if (data.long_ma && data.long_ma.length > 0) {
+            if (displayLongMa && displayLongMa.length > 0) {
                 datasets.push({
                     label: 'Long MA',
-                    data: data.long_ma,
+                    data: displayLongMa,
                     borderColor: 'rgb(204, 0, 119)',
                     backgroundColor: 'rgba(204, 0, 119, 0.1)',
-                    borderWidth: 1,
-                    tension: 0.1
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: false
                 });
             }
+            
+            // Find min and max prices to set y-axis scale with padding
+            const validPrices = displayPrices.filter(p => p !== null);
+            const minPrice = Math.min(...validPrices);
+            const maxPrice = Math.max(...validPrices);
+            const priceRange = maxPrice - minPrice;
+            const yMin = Math.max(0, minPrice - (priceRange * 0.05)); // 5% padding below
+            const yMax = maxPrice + (priceRange * 0.05); // 5% padding above
             
             // Add explanatory annotation for what the chart shows
             const chartTitle = data.live_update ? 
                 'BTC/USDT Price & Moving Averages (LIVE)' :
                 'BTC/USDT Price & Moving Averages (Static)';
             
-            // Create the chart
+            // Create the chart with improved configuration
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -610,7 +1072,7 @@
                     maintainAspectRatio: false,
                     plugins: {
                         title: {
-                                    display: true,
+                            display: true,
                             text: chartTitle,
                             font: {
                                 size: 16,
@@ -618,6 +1080,8 @@
                             }
                         },
                         tooltip: {
+                            mode: 'index',
+                            intersect: false,
                             callbacks: {
                                 title: function(tooltipItems) {
                                     return 'Time: ' + tooltipItems[0].label;
@@ -636,31 +1100,45 @@
                             position: 'top',
                             labels: {
                                 usePointStyle: true,
-                                boxWidth: 10
+                                boxWidth: 10,
+                                padding: 15
                             }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: false,
+                            suggestedMin: yMin,
+                            suggestedMax: yMax,
                             title: {
                                 display: true,
                                 text: 'Price (USDT)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
                             }
                         },
                         x: {
                             title: {
                                 display: true,
                                 text: 'Time'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: 10 // Limit the number of ticks for better readability
                             }
                         }
                     },
                     elements: {
                         point: {
-                            radius: 0 // Hide points for cleaner lines
+                            radius: 3, // Default point size
+                            hoverRadius: 6 // Size on hover
                         },
                         line: {
-                            tension: 0.3 // Slightly smoother curves
+                            tension: 0.2 // Smoother curves
                         }
                     },
                     interaction: {
@@ -673,25 +1151,69 @@
             // Add signal markers if available
             if (data.signals && data.signals.length > 0) {
                 try {
+                    // Create separate datasets for buy and sell signals
+                    const buySignalPoints = [];
+                    const sellSignalPoints = [];
+                    
                     data.signals.forEach(sig => {
-                        if (sig.index < data.prices.length) {
+                        // Find nearest matching index in our sampled data
+                        let matchIndex = sig.index;
+                        if (displayPrices.length !== data.prices.length) {
+                            // If we're using sampled data, find the closest point
+                            const originalTime = data.timestamps ? data.timestamps[sig.index] : sig.index;
+                            
+                            // Find closest timestamp in displayed data
+                            let closestDiff = Infinity;
+                            for (let i = 0; i < displayTimestamps.length; i++) {
+                                const diff = Math.abs((displayTimestamps[i] || i) - (originalTime || sig.index));
+                                if (diff < closestDiff) {
+                                    closestDiff = diff;
+                                    matchIndex = i;
+                                }
+                            }
+                        }
+                        
+                        if (matchIndex < displayPrices.length) {
                             const signalPoint = {
-                                x: labels[sig.index] || sig.index,
-                                y: data.prices[sig.index]
+                                x: labels[matchIndex] || matchIndex,
+                                y: displayPrices[matchIndex]
                             };
                             
-                            chart.data.datasets.push({
-                                label: sig.type === 'buy' ? 'Buy Signal' : 'Sell Signal',
-                                data: [signalPoint],
-                                pointBackgroundColor: sig.type === 'buy' ? '#00cc00' : '#cc0000',
-                                pointBorderColor: '#ffffff',
-                                pointBorderWidth: 2,
-                                pointRadius: 8,
-                                pointHoverRadius: 10,
-                                showLine: false
-                            });
+                            if (sig.type === 'buy') {
+                                buySignalPoints.push(signalPoint);
+                            } else {
+                                sellSignalPoints.push(signalPoint);
+                            }
                         }
                     });
+                    
+                    // Add buy signals
+                    if (buySignalPoints.length > 0) {
+                        chart.data.datasets.push({
+                            label: 'Buy Signal',
+                            data: buySignalPoints,
+                            backgroundColor: '#00cc00',
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            showLine: false
+                        });
+                    }
+                    
+                    // Add sell signals
+                    if (sellSignalPoints.length > 0) {
+                        chart.data.datasets.push({
+                            label: 'Sell Signal',
+                            data: sellSignalPoints,
+                            backgroundColor: '#cc0000',
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            showLine: false
+                        });
+                    }
                     
                     chart.update();
                 } catch (err) {
@@ -701,6 +1223,57 @@
             
             // Update metrics if available
             try {
+                // Update new metric elements first
+                const currentPrice = document.getElementById('current-price');
+                const shortMa = document.getElementById('short-ma');
+                const longMa = document.getElementById('long-ma');
+                const volatility = document.getElementById('volatility');
+                
+                if (currentPrice && data.prices.length > 0) {
+                    const latest = data.prices[data.prices.length-1];
+                    currentPrice.textContent = latest.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+                
+                if (shortMa && data.short_ma && data.short_ma.length > 0) {
+                    const lastValidShortMa = data.short_ma.filter(val => val !== null).slice(-1)[0];
+                    if (lastValidShortMa) {
+                        shortMa.textContent = lastValidShortMa.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                }
+                
+                if (longMa && data.long_ma && data.long_ma.length > 0) {
+                    const lastValidLongMa = data.long_ma.filter(val => val !== null).slice(-1)[0];
+                    if (lastValidLongMa) {
+                        longMa.textContent = lastValidLongMa.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                }
+                
+                if (volatility && data.volatility !== undefined && data.volatility !== null) {
+                    volatility.textContent = data.volatility.toFixed(4);
+                }
+                
+                // Update live indicator
+                const liveIndicator = document.getElementById('live-indicator');
+                if (liveIndicator) {
+                    if (data.live_update) {
+                        liveIndicator.classList.remove('off');
+                        liveIndicator.classList.add('on');
+                    } else {
+                        liveIndicator.classList.remove('on');
+                        liveIndicator.classList.add('off');
+                    }
+                }
+                
+                // Also try updating old metric elements for backward compatibility
                 const metricsPrice = document.getElementById('metrics-price');
                 const metricsVolatility = document.getElementById('metrics-volatility');
                 const metricsSignal = document.getElementById('metrics-signal');
@@ -720,9 +1293,84 @@
             } catch (err) {
                 console.error("Error updating metrics:", err);
             }
+            
+            // After creating the chart, update the metrics display
+            updateMetricsDisplay(data);
+        }
+        
+        // Function to update the metrics display
+        function updateMetricsDisplay(data) {
+            try {
+                // Get the latest values
+                const latestPrice = data.prices && data.prices.length > 0 ? 
+                    data.prices[data.prices.length - 1] : null;
+                
+                const latestShortMa = data.short_ma && data.short_ma.length > 0 ? 
+                    data.short_ma[data.short_ma.length - 1] : null;
+                
+                const latestLongMa = data.long_ma && data.long_ma.length > 0 ? 
+                    data.long_ma[data.long_ma.length - 1] : null;
+                
+                const volatilityValue = data.volatility || null;
+                
+                // Format the values to display
+                const formatPrice = (price) => {
+                    if (price === null || price === undefined || isNaN(price)) return '--';
+                    return price.toFixed(2);
+                };
+                
+                const formatVolatility = (vol) => {
+                    if (vol === null || vol === undefined || isNaN(vol)) return '--';
+                    return (vol * 100).toFixed(4) + '%';
+                };
+                
+                // Update the metric cards
+                const currentPrice = document.getElementById('current-price');
+                const shortMa = document.getElementById('short-ma');
+                const longMa = document.getElementById('long-ma');
+                const volatility = document.getElementById('volatility');
+                
+                if (currentPrice) currentPrice.textContent = formatPrice(latestPrice);
+                if (shortMa) shortMa.textContent = formatPrice(latestShortMa);
+                if (longMa) longMa.textContent = formatPrice(latestLongMa);
+                if (volatility) volatility.textContent = formatVolatility(volatilityValue);
+                
+                // Also update old metric elements if they exist
+                const metricsPrice = document.getElementById('metrics-price');
+                const metricsVolatility = document.getElementById('metrics-volatility');
+                
+                if (metricsPrice) metricsPrice.textContent = formatPrice(latestPrice);
+                if (metricsVolatility) metricsVolatility.textContent = formatVolatility(volatilityValue);
+                
+            } catch (err) {
+                console.error("Error updating metrics display:", err);
+            }
         }
         
         function fetchChartData() {
+            // Add loading indicator to chart if needed
+            const chartContainer = document.getElementById('price-chart');
+            if (chartContainer && !document.getElementById('chart-loading')) {
+                const loadingDiv = document.createElement('div');
+                loadingDiv.id = 'chart-loading';
+                loadingDiv.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;color:#666;font-style:italic;';
+                loadingDiv.innerText = 'Loading chart data...';
+                chartContainer.appendChild(loadingDiv);
+            }
+            
+            // Add reconnecting indicator if needed
+            if (chartContainer && !document.getElementById('reconnecting-indicator')) {
+                const reconnectingDiv = document.createElement('div');
+                reconnectingDiv.id = 'reconnecting-indicator';
+                reconnectingDiv.style.cssText = 'position:absolute;top:10px;right:10px;background:#ffda6a;color:#7d5700;padding:6px 12px;border-radius:4px;font-size:12px;display:none;z-index:20;';
+                reconnectingDiv.innerHTML = '<span style="display:inline-block;width:8px;height:8px;background:#e89b00;border-radius:50%;margin-right:6px;animation:pulse 1s infinite;"></span> Reconnecting...';
+                chartContainer.appendChild(reconnectingDiv);
+            }
+            
+            // Show loading indicator
+            const loadingElement = document.getElementById('chart-loading');
+            if (loadingElement) loadingElement.style.display = 'block';
+            
             fetch('/price-feed')
                 .then(response => {
                     if (!response.ok) {
@@ -731,6 +1379,13 @@
                     return response.json();
                 })
                 .then(data => {
+                    // Hide loading indicator
+                    if (loadingElement) loadingElement.style.display = 'none';
+                    
+                    // Hide reconnecting indicator if visible
+                    const reconnectingElement = document.getElementById('reconnecting-indicator');
+                    if (reconnectingElement) reconnectingElement.style.display = 'none';
+                    
                     // Make sure chart still exists (might be gone after restart)
                     const canvas = document.getElementById('priceChart');
                     if (!canvas) {
@@ -738,15 +1393,64 @@
                         return;
                     }
                     
-                    // Reduced console logging
-                    if (chart && chart.data && chart.data.datasets && 
-                        data.prices && chart.data.datasets[0].data.length !== data.prices.length) {
-                        console.log("Chart data updated with", data.prices.length, "prices");
+                    // Reset reconnect attempts on successful data fetch
+                    window.reconnectAttempts = 0;
+                    window.serverOfflineShown = false;
+                    
+                    // Detailed data validation and logging
+                    if (!data) {
+                        console.error("Received null data from server");
+                        renderChart({ 
+                            message: 'Received null data from server',
+                            no_data: true 
+                        });
+                        return;
                     }
                     
-                    renderChart(data);
+                    console.log("Received data structure:", 
+                                "prices array:", data.prices ? `${data.prices.length} items` : "missing", 
+                                "timestamps:", data.timestamps ? `${data.timestamps.length} items` : "missing",
+                                "first price:", data.prices ? data.prices[0] : "N/A", 
+                                "last price:", data.prices ? data.prices[data.prices.length - 1] : "N/A");
+                    
+                    // Check if data is valid before updating chart
+                    if (data && data.prices && Array.isArray(data.prices) && data.prices.length > 0) {
+                        // Check if prices are numeric values
+                        const allPricesValid = data.prices.every(price => 
+                            typeof price === 'number' && !isNaN(price) && isFinite(price));
+                        
+                        if (!allPricesValid) {
+                            console.error("Invalid price values in data:", data.prices.slice(0, 5));
+                            renderChart({ 
+                                message: 'Invalid price data received',
+                                no_data: true 
+                            });
+                            return;
+                        }
+                        
+                        // Reduced console logging - only log when there's a change
+                        if (chart && chart.data && chart.data.datasets && 
+                            chart.data.datasets[0].data.length !== data.prices.length) {
+                            console.log("Chart data updated with", data.prices.length, "prices");
+                        }
+                        
+                        renderChart(data);
+                    } else {
+                        console.log("Received empty or invalid data from server:",
+                                   "has data:", !!data,
+                                   "has prices:", !!(data && data.prices),
+                                   "is array:", !!(data && data.prices && Array.isArray(data.prices)),
+                                   "has length:", !!(data && data.prices && Array.isArray(data.prices) && data.prices.length > 0));
+                        renderChart({ 
+                            message: 'Waiting for valid data from server...',
+                            no_data: true 
+                        });
+                    }
                 })
                 .catch(err => {
+                    // Hide loading indicator
+                    if (loadingElement) loadingElement.style.display = 'none';
+                    
                     console.error("Chart fetch error:", err);
                     
                     // Check if this is a connection error (server down)
@@ -755,29 +1459,53 @@
                         err.message.includes("Connection refused")) {
                         
                         console.log("Connection to server lost. Retrying in 5 seconds...");
+                        
+                        // Increment reconnection attempts
+                        let reconnectAttempts = window.reconnectAttempts || 0;
+                        window.reconnectAttempts = reconnectAttempts + 1;
+                        
+                        // Show reconnecting indicator
+                        const reconnectingElement = document.getElementById('reconnecting-indicator');
+                        if (reconnectingElement) {
+                            reconnectingElement.style.display = 'block';
+                            reconnectingElement.innerHTML = `<span style="display:inline-block;width:8px;height:8px;background:#e89b00;border-radius:50%;margin-right:6px;animation:pulse 1s infinite;"></span> Reconnecting (${reconnectAttempts})...`;
+                        }
+                        
                         // Retry connecting after 5 seconds
                         stopChartPolling();
                         setTimeout(() => {
-                            // Try to reconnect
-                            startChartPolling();
+                            // Only try to reconnect if we haven't shown the offline message yet
+                            if (!window.serverOfflineShown) {
+                                console.log(`Reconnection attempt ${window.reconnectAttempts}`);
+                                startChartPolling();
+                            }
                         }, 5000);
-                    } else {
-                        // For other errors, render empty chart
-                    stopChartPolling();
                         
-                        // Make sure we still have the canvas
-                        const canvas = document.getElementById('priceChart');
-                        if (canvas) {
-                    renderChart(null);
+                        // Show a message on the chart
+                        renderChart({ 
+                            message: 'Connection to server lost. Retrying...',
+                            no_data: true 
+                        });
+                        
+                        // After 5 failed attempts, let the status handler show the offline message
+                        if (reconnectAttempts >= 5 && !window.serverOfflineShown) {
+                            handleServerOffline();
                         }
+                    } else {
+                        // For other errors, render empty chart with error message
+                        renderChart({ 
+                            message: 'Error loading chart data. Please refresh the page.',
+                            no_data: true 
+                        });
+                        stopChartPolling();
                     }
                     
                     // Try to send error to backend for logging - with catch to prevent cascading errors
                     try {
-                    fetch('/frontend-error', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: err.message, stack: err.stack })
+                        fetch('/frontend-error', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: err.message, stack: err.stack })
                         }).catch(() => {});
                     } catch (e) {
                         // Silently ignore errors in error reporting
@@ -801,13 +1529,17 @@
         }
         
         function fetchLogs() {
-            const logsList = document.getElementById('logs-list');
+            // Support both old and new UI elements
+            const logsList = document.getElementById('logs-list') || document.getElementById('log-entries');
             const loading = document.getElementById('logs-loading');
             
             // Prevent errors if elements don't exist
-            if (!logsList || !loading) return;
+            if (!logsList) {
+                console.log("Log list element not found");
+                return;
+            }
             
-            loading.style.display = 'flex';
+            if (loading) loading.style.display = 'flex';
             
             let endpoint = viewingHistory 
                 ? `/bot-logs-file/${currentLogFile}` 
@@ -843,6 +1575,12 @@
                                 </li>
                             `;
                         });
+                        
+                        // Scroll to bottom of logs
+                        const logsContent = document.getElementById('logs-content');
+                        if (logsContent) {
+                            logsContent.scrollTop = logsContent.scrollHeight;
+                        }
                     }
                     
                     if (loading) loading.style.display = 'none';
@@ -948,44 +1686,70 @@
                     return response.json();
                 })
                 .then(data => {
-                    const statusDiv = document.getElementById('bot-status-display');
+                    // Update status display (supports both old and new UI)
+                    const statusDiv = document.getElementById('bot-status-display') || document.getElementById('bot-status');
                     const statusValue = document.getElementById('metrics-status');
                     const lastAction = document.getElementById('last-action');
                     const lastResult = document.getElementById('last-result');
                     const lastError = document.getElementById('last-error');
+                    const botMessages = document.getElementById('bot-messages');
                     
-                    // Update last action, result, and error
+                    // Update bot messages in the new UI
+                    if (botMessages) {
+                        let message = "Not running. Click Start Bot to begin trading.";
+                        if (data.is_running) {
+                            message = data.last_action || "Bot is running";
+                        } else if (data.last_action) {
+                            message = data.last_action;
+                        }
+                        
+                        if (data.last_error) {
+                            message += `<br><span style="color: #b00020;">Error: ${data.last_error}</span>`;
+                        }
+                        
+                        botMessages.innerHTML = message;
+                    }
+                    
+                    // Update last action, result, and error (old UI)
                     if (lastAction) lastAction.textContent = data.last_action || 'No recent actions';
                     
                     if (lastResult) {
                         if (data.last_result) {
                             lastResult.textContent = data.last_result;
-                            lastResult.style.display = 'block';
+                            lastResult.parentElement.style.display = 'block';
                         } else {
-                            lastResult.style.display = 'none';
+                            lastResult.parentElement.style.display = 'none';
                         }
                     }
                     
                     if (lastError) {
                         if (data.last_error) {
                             lastError.textContent = data.last_error;
-                            lastError.style.display = 'block';
+                            lastError.parentElement.style.display = 'block';
                         } else {
-                            lastError.style.display = 'none';
+                            lastError.parentElement.style.display = 'none';
                         }
                     }
                     
-                    if (!statusDiv || !statusValue) return;
+                    // Update trading mode display
+                    const modeValue = document.getElementById('mode-value');
+                    if (modeValue) {
+                        modeValue.textContent = data.is_running ? 'Running' : 'Stopped';
+                    }
+                    
+                    if (!statusDiv) return;
                     
                     if (data.is_running) {
                         statusDiv.textContent = 'Bot Status: Running';
                         statusDiv.className = 'bot-status-display running';
-                        statusValue.textContent = 'RUNNING';
-                        statusValue.className = 'value';
+                        if (statusValue) {
+                            statusValue.textContent = 'RUNNING';
+                            statusValue.className = 'value';
+                        }
                         
                         // Enable the stop button and disable the start button
-                        const startButton = document.getElementById('start-button');
-                        const stopButton = document.getElementById('stop-button');
+                        const startButton = document.getElementById('start-button') || document.getElementById('start-bot');
+                        const stopButton = document.getElementById('stop-button') || document.getElementById('stop-bot');
                         
                         if (startButton) startButton.disabled = true;
                         if (stopButton) stopButton.disabled = false;
@@ -994,17 +1758,20 @@
                     } else {
                         statusDiv.textContent = 'Bot Status: Stopped';
                         statusDiv.className = 'bot-status-display stopped';
-                        statusValue.textContent = 'STOPPED';
-                        statusValue.className = 'value stopped';
+                        if (statusValue) {
+                            statusValue.textContent = 'STOPPED';
+                            statusValue.className = 'value stopped';
+                        }
                         
                         // Enable the start button and disable the stop button
-                        const startButton = document.getElementById('start-button');
-                        const stopButton = document.getElementById('stop-button');
+                        const startButton = document.getElementById('start-button') || document.getElementById('start-bot');
+                        const stopButton = document.getElementById('stop-button') || document.getElementById('stop-bot');
                         
                         if (startButton) startButton.disabled = false;
                         if (stopButton) stopButton.disabled = true;
                         
-                        stopAllPolling();
+                        // Don't stop polling completely, just fetch logs once
+                        // This allows us to see logs even when bot is stopped
                         fetchLogs();
                     }
                 })
@@ -1024,15 +1791,15 @@
                         
                         // After 5 failed attempts, show the server offline message
                         if (reconnectAttempts >= 5) {
-                    handleServerOffline();
+                            handleServerOffline();
                         }
                         
                         // Try to send error to backend for terminal logging
                         try {
-                    fetch('/frontend-error', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: err.message, stack: err.stack })
+                            fetch('/frontend-error', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ message: err.message, stack: err.stack })
                             }).catch(() => {});
                         } catch (e) {
                             // Silently ignore errors in error reporting
@@ -1052,16 +1819,110 @@
             
             const container = document.querySelector('.container');
             if (container) {
+                // Save original content for restoring
+                window.originalContent = container.innerHTML;
+                
                 container.innerHTML = `
-                    <div style="text-align:center;margin-top:100px;">
-                        <h1 style="color:#b00020;">Server offline</h1>
-                        <p>The backend server is not reachable. Please restart the backend and reload this page.</p>
-                        <button onclick="window.location.reload()" style="margin-top:20px;padding:10px 20px;background:#0077cc;color:white;border:none;border-radius:4px;cursor:pointer;">
-                            Refresh page
-                        </button>
+                    <div style="text-align:center;margin:40px auto;max-width:600px;">
+                        <h1 style="color:#dc2626;margin-bottom:20px;">Server Connection Lost</h1>
+                        <p style="font-size:16px;line-height:1.5;margin-bottom:30px;">
+                            Unable to connect to the backend server. This could be due to:
+                        </p>
+                        <ul style="text-align:left;background:#f8f9fa;padding:20px 30px;border-radius:12px;margin-bottom:30px;line-height:1.6;">
+                            <li>The server is still starting up</li>
+                            <li>Port 8001 is already in use by another process</li>
+                            <li>The server has crashed or was terminated</li>
+                        </ul>
+                        <div style="margin-bottom:30px;padding:15px;background:#f0f9ff;border-radius:8px;border-left:4px solid #0284c7;">
+                            <p style="margin:0;font-weight:500;">The dashboard will automatically reconnect when the server is available.</p>
+                        </div>
+                        <div style="display:flex;gap:15px;justify-content:center;">
+                            <button onclick="attemptReconnection()" style="padding:10px 20px;background:#0284c7;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+                                Try Reconnecting Now
+                            </button>
+                            <button onclick="window.location.reload()" style="padding:10px 20px;background:#4b5563;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+                                Reload Page
+                            </button>
+                        </div>
                     </div>
                 `;
             }
+            
+            // Start a background auto-reconnect attempt every 10 seconds
+            if (!window.reconnectTimer) {
+                window.reconnectTimer = setInterval(attemptReconnection, 10000);
+            }
+        }
+        
+        function attemptReconnection() {
+            // Show reconnection attempt status
+            const container = document.querySelector('.container');
+            if (container && !document.getElementById('reconnect-status')) {
+                const statusDiv = document.createElement('div');
+                statusDiv.id = 'reconnect-status';
+                statusDiv.style.cssText = 'margin-top:20px;text-align:center;color:#666;';
+                statusDiv.innerText = 'Attempting to reconnect...';
+                container.appendChild(statusDiv);
+            }
+            
+            // Try to fetch the status endpoint to check if server is up
+            fetch('/bot-status')
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Reconnection successful!");
+                        
+                        // Clear any reconnection timers
+                        if (window.reconnectTimer) {
+                            clearInterval(window.reconnectTimer);
+                            window.reconnectTimer = null;
+                        }
+                        
+                        // Reset connection status
+                        window.reconnectAttempts = 0;
+                        window.serverOfflineShown = false;
+                        
+                        // Restore original content if we saved it
+                        if (window.originalContent) {
+                            const container = document.querySelector('.container');
+                            if (container) {
+                                container.innerHTML = window.originalContent;
+                                
+                                // Reinitialize the page
+                                startAllPolling();
+                                updateBotStatus();
+                                startChartPolling();
+                                fetchLogs();
+                                updateTradingInfo();
+                                
+                                // Re-attach event listeners
+                                const startBtn = document.getElementById('start-bot');
+                                const stopBtn = document.getElementById('stop-bot');
+                                const refreshBtn = document.getElementById('refresh-status');
+                                
+                                if (startBtn) startBtn.addEventListener('click', startBot);
+                                if (stopBtn) stopBtn.addEventListener('click', stopBot);
+                                if (refreshBtn) refreshBtn.addEventListener('click', refreshLogs);
+                            }
+                        } else {
+                            // If we can't restore, just reload the page
+                            window.location.reload();
+                        }
+                    } else {
+                        // Update status that server is still down
+                        const statusDiv = document.getElementById('reconnect-status');
+                        if (statusDiv) {
+                            statusDiv.innerText = `Server still unavailable. Will retry automatically...`;
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log("Reconnection attempt failed:", err.message);
+                    // Update status that server is still down
+                    const statusDiv = document.getElementById('reconnect-status');
+                    if (statusDiv) {
+                        statusDiv.innerText = `Server still unavailable. Will retry automatically...`;
+                    }
+                });
         }
         
         function startBot() {
@@ -1071,7 +1932,10 @@
                     return response.text();
                 })
                 .then(() => {
+                    console.log("Bot started successfully");
                     updateBotStatus();
+                    startLogPolling();
+                    startChartPolling();
                 })
                 .catch(err => {
                     console.error("Start bot error:", err);
@@ -1081,12 +1945,21 @@
         }
         
         function stopBot() {
+            // Try both possible endpoints
             fetch('/stop-bot', { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) {
+                        // Try alternate endpoint if first one fails
+                        return fetch('/bot-control?action=stop', { method: 'POST' });
+                    }
+                    return response;
+                })
                 .then(response => {
                     if (!response.ok) throw new Error('Failed to stop bot');
                     return response.text();
                 })
                 .then(() => {
+                    console.log("Bot stopped successfully");
                     updateBotStatus();
                     fetchLogs();
                 })
@@ -1162,138 +2035,303 @@
             return false;
         }
         
+        function updateTradingInfo() {
+            // Get the DEMO_MODE from the server status endpoint
+            fetch('/bot-status')
+                .then(response => response.json())
+                .then(data => {
+                    // Update trading mode display
+                    const isDemoMode = data.demo_mode || false;
+                    document.getElementById('trade-mode-value').textContent = isDemoMode ? 'Demo Mode' : 'Live Trading';
+                    document.getElementById('demo-badge').style.display = isDemoMode ? 'inline-block' : 'none';
+                    document.getElementById('live-badge').style.display = !isDemoMode ? 'inline-block' : 'none';
+                    
+                    // Update trade amount info
+                    const tradeAmount = data.trade_amount || 0.001;
+                    document.getElementById('trade-amount').textContent = `${tradeAmount} BTC`;
+                    
+                    // Update current price and calculate USD value
+                    const currentPrice = data.current_price || 0;
+                    if (currentPrice > 0) {
+                        const usdValue = (tradeAmount * currentPrice).toFixed(2);
+                        document.getElementById('trade-amount-usd').textContent = usdValue;
+                    }
+                    
+                    // Update volatility threshold
+                    const volThreshold = data.min_volatility || 0.0002;
+                    document.getElementById('vol-threshold').textContent = volThreshold;
+                    document.getElementById('min-vol-display').textContent = volThreshold;
+                })
+                .catch(error => console.error('Error fetching trading info:', error));
+            
+            // Don't attempt to fetch from an endpoint that doesn't exist
+            // This avoids the 404 error for order-history
+        }
+        
         // Initialize the page
         window.onload = function() {
             // Check bot status and initialize UI
             updateBotStatus();
             
             // Add event listeners for buttons
-            document.getElementById('start-button').addEventListener('click', startBot);
-            document.getElementById('stop-button').addEventListener('click', stopBot);
-            document.getElementById('refresh-button').addEventListener('click', refreshLogs);
-            document.getElementById('shutdown-button').addEventListener('click', shutdownAll);
-            document.getElementById('restart-button').addEventListener('click', restartApp);
-            document.getElementById('kill-port-button').addEventListener('click', killPortProcesses);
+            const startBtn = document.getElementById('start-bot');
+            const stopBtn = document.getElementById('stop-bot');
+            const refreshBtn = document.getElementById('refresh-status');
+            
+            if (startBtn) startBtn.addEventListener('click', startBot);
+            if (stopBtn) stopBtn.addEventListener('click', stopBot);
+            if (refreshBtn) refreshBtn.addEventListener('click', refreshLogs);
+            
+            // Legacy buttons (might not exist in updated UI)
+            const shutdownBtn = document.getElementById('shutdown-button');
+            const restartBtn = document.getElementById('restart-button');
+            const killPortBtn = document.getElementById('kill-port-button');
+            
+            if (shutdownBtn) shutdownBtn.addEventListener('click', shutdownAll);
+            if (restartBtn) restartBtn.addEventListener('click', restartApp);
+            if (killPortBtn) killPortBtn.addEventListener('click', killPortProcesses);
+            
+            // Add chart initialization
+            const priceChart = document.getElementById('price-chart');
+            if (priceChart) {
+                // Create canvas for Chart.js
+                const canvas = document.createElement('canvas');
+                canvas.id = 'priceChart';
+                priceChart.appendChild(canvas);
+                
+                // Initialize chart
+                startChartPolling();
+            }
+            
+            // Add our new functions
+            updateTradingInfo();
+            
+            // Start log polling
+            startLogPolling();
+            
+            // Refresh trading info every 30 seconds
+            setInterval(updateTradingInfo, 30000);
         };
         
         window.onbeforeunload = function() { 
             stopAllPolling(); 
         };
+        
+        // Debug function to help diagnose chart issues
+        function debugChartData() {
+            fetch('/price-feed')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("======= CHART DATA DEBUG =======");
+                    console.log("Timestamps type:", typeof data.timestamps);
+                    console.log("First timestamp:", data.timestamps[0]);
+                    console.log("Last timestamp:", data.timestamps[data.timestamps.length - 1]);
+                    
+                    // Create a date from the timestamp
+                    const firstDate = new Date(data.timestamps[0]);
+                    console.log("First date:", firstDate.toString());
+                    
+                    console.log("Prices count:", data.prices.length);
+                    console.log("First price:", data.prices[0]);
+                    console.log("Last price:", data.prices[data.prices.length - 1]);
+                    
+                    console.log("Short MA count:", data.short_ma ? data.short_ma.length : "N/A");
+                    console.log("Long MA count:", data.long_ma ? data.long_ma.length : "N/A");
+                    console.log("Signals count:", data.signals ? data.signals.length : "N/A");
+                    
+                    // Print any fields that might be causing issues
+                    const unexpectedFields = [];
+                    for (const key in data) {
+                        if (!['timestamps', 'prices', 'short_ma', 'long_ma', 'signals', 'volatility', 'live_update'].includes(key)) {
+                            unexpectedFields.push(key);
+                        }
+                    }
+                    if (unexpectedFields.length > 0) {
+                        console.log("Unexpected fields:", unexpectedFields);
+                    }
+                    
+                    alert("Chart data debug info printed to console");
+                })
+                .catch(err => {
+                    console.error("Debug error:", err);
+                    alert("Error fetching chart data: " + err.message);
+                });
+        }
     </script>
 </head>
 <body>
     <div class="container">
-        <h1>Trading Bot Control</h1>
+        <h1>Trading Bot Dashboard <span id="version-tag">v1.0.1</span></h1>
         
         <div class="dashboard">
             <div class="chart-section">
+                <h2>Price Chart &amp; Signals <span id="symbol-display" class="symbol-tag">BTC/USDT</span></h2>
                 <div class="chart-container">
-                    <canvas id="priceChart"></canvas>
-                    <div class="live-indicator on">
+                    <div id="price-chart"></div>
+                    <div id="live-indicator" class="live-indicator off">
                         <div class="live-dot"></div>
-                        LIVE
-                    </div>
-                    <div class="live-indicator off">
-                        <div class="live-dot"></div>
-                        STATIC
+                        <span>LIVE</span>
                     </div>
                 </div>
-                
                 <div class="trade-metrics">
                     <div class="metric-card price">
                         <h3>Current Price</h3>
-                        <div class="value" id="metrics-price">-</div>
+                        <div id="current-price" class="value">--</div>
+                        <p class="explanation">Latest market price for BTC/USDT</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Short MA (5)</h3>
+                        <div id="short-ma" class="value">--</div>
+                        <p class="explanation">5-period moving average</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Long MA (20)</h3>
+                        <div id="long-ma" class="value">--</div>
+                        <p class="explanation">20-period moving average</p>
                     </div>
                     <div class="metric-card volatility">
                         <h3>Volatility</h3>
-                        <div class="value" id="metrics-volatility">-</div>
-                    </div>
-                    <div class="metric-card signal">
-                        <h3>Last Signal</h3>
-                        <div class="value" id="metrics-signal">-</div>
-                    </div>
-                    <div class="metric-card status">
-                        <h3>Bot Status</h3>
-                        <div class="value {% if bot_status.is_running %}running{% else %}stopped{% endif %}" id="metrics-status">
-                            {% if bot_status.is_running %}RUNNING{% else %}STOPPED{% endif %}
-                        </div>
+                        <div id="volatility" class="value">--</div>
+                        <p class="explanation">20-period price volatility</p>
                     </div>
                 </div>
             </div>
             
             <div class="controls-section">
-                <div id="bot-status-display" class="bot-status-display {% if bot_status.is_running %}running{% else %}stopped{% endif %}">
-            Bot Status: {% if bot_status.is_running %}Running{% else %}Stopped{% endif %}
-        </div>
-                
+                <div id="bot-status" class="bot-status-display stopped">Bot Status: Stopped</div>
                 <div class="button-row">
-                    <button id="start-button" class="run-btn" {% if bot_status.is_running %}disabled{% endif %}>Run Bot Now</button>
-                    <button id="stop-button" class="stop-btn" {% if not bot_status.is_running %}disabled{% endif %}>Stop Bot</button>
-                </div>
-                
-                <div class="button-row">
-                    <button id="refresh-button" class="refresh-btn">Refresh Logs</button>
-                    <button id="shutdown-button" class="stop-btn">Shutdown All</button>
-                </div>
-                
-                <div class="button-row">
-                    <button id="restart-button" class="refresh-btn" style="background-color: #ff9800; color: white;">Restart App</button>
-                    <button id="kill-port-button" class="refresh-btn" style="background-color: #9c27b0; color: white;">Kill Port Processes</button>
+                    <button id="start-bot" class="run-btn">Start Bot</button>
+                    <button id="stop-bot" class="stop-btn" disabled>Stop Bot</button>
+                    <button id="refresh-status" class="refresh-btn">Refresh Status</button>
                 </div>
                 
                 <div class="status-messages">
-                    <div><strong>Last Action:</strong> <span id="last-action">{{ bot_status.last_action }}</span></div>
-                    
-                    <div class="success" style="display: {% if bot_status.last_result %}block{% else %}none{% endif %}">
-                        <strong>Result:</strong> <span id="last-result">{{ bot_status.last_result }}</span>
-                    </div>
-                    
-                    <div class="error" style="display: {% if bot_status.last_error %}block{% else %}none{% endif %}">
-                        <strong>Error:</strong> <span id="last-error">{{ bot_status.last_error }}</span>
-                    </div>
+                    <strong>Bot Info:</strong>
+                    <div id="bot-messages">Not running. Click Start Bot to begin trading.</div>
                 </div>
-        </div>
+                
+                <!-- Add trading mode indicator -->
+                <div id="trading-mode" class="trading-mode stopped">
+                    Trading Mode: <span id="mode-value">Unknown</span>
+                </div>
+            </div>
             
             <div class="logs-section">
-        <div class="logs">
+                <div class="logs">
                     <div class="logs-header">
-                        <h2 id="current-logs-label">Recent Bot Logs</h2>
-                        <button id="history-back-btn" style="display:none; font-size:12px; padding:4px 8px;" 
-                                onclick="returnToCurrentLogs()">
-                            ← Back to Current Logs
-                        </button>
-                    </div>
-                    
-                    <div class="logs-controls">
-                        <button onclick="toggleLogHistory()">View Log History</button>
-                        
-                        <select onchange="filterLogsByCategory(this.value)">
-                            <option value="ALL">All Categories</option>
-                            {% for category in log_categories %}
-                                <option value="{{ category }}">{{ category }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    
-                    <div id="log-history-panel" class="log-history-panel">
-                        <h3>Log History</h3>
-                        <div id="log-history-list" class="log-history-list">
-                            <div class="loading">Loading log history...</div>
+                        <h2>Bot Logs</h2>
+                        <div class="log-controls">
+                            <button id="clear-logs" class="clear-btn">Clear</button>
+                            <select id="log-filter">
+                                <option value="ALL">All Categories</option>
+                                <option value="INFO">Info</option>
+                                <option value="ERROR">Errors</option>
+                                <option value="TRADE">Trades</option>
+                                <option value="SIGNAL">Signals</option>
+                                <option value="PRICE">Price</option>
+                                <option value="METRIC">Metrics</option>
+                                <option value="SYSTEM">System</option>
+                            </select>
                         </div>
                     </div>
+                    <div id="logs-content" class="logs-content">
+                        <ul id="log-entries">
+                            <li class="empty">No logs yet. Start the bot to see activity.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- New Trading Information Panel -->
+            <div class="trade-info-panel">
+                <h2>Trading Configuration</h2>
+                <table class="trade-config-table">
+                    <tr>
+                        <th>Setting</th>
+                        <th>Value</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Trading Mode</td>
+                        <td>
+                            <span id="trade-mode-value" class="value-highlight">Loading...</span>
+                            <span id="demo-badge" class="demo-badge" style="display:none;">DEMO</span>
+                            <span id="live-badge" class="live-badge" style="display:none;">LIVE TRADING</span>
+                        </td>
+                        <td>Whether real funds are being used</td>
+                    </tr>
+                    <tr>
+                        <td>Trading Pair</td>
+                        <td><span id="trading-pair" class="value-highlight">BTC/USDT</span></td>
+                        <td>Asset pair being traded</td>
+                    </tr>
+                    <tr>
+                        <td>Trade Amount</td>
+                        <td><span id="trade-amount" class="value-highlight">0.001 BTC</span></td>
+                        <td>Amount per trade (approx. $<span id="trade-amount-usd">100</span>)</td>
+                    </tr>
+                    <tr>
+                        <td>Volatility Threshold</td>
+                        <td><span id="vol-threshold" class="value-highlight">0.0002</span></td>
+                        <td>Minimum volatility required to trade</td>
+                    </tr>
+                    <tr>
+                        <td>Trading Frequency</td>
+                        <td><span class="value-highlight">Every 10 seconds</span></td>
+                        <td>How often the bot checks for signals</td>
+                    </tr>
+                </table>
+                
+                <div class="order-history">
+                    <h3>Recent Orders</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-history-table">
+                            <tr>
+                                <td colspan="5" class="empty-orders">No orders executed yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Strategy Explanation Panel -->
+            <div class="strategy-panel">
+                <h2>Strategy Information</h2>
+                
+                <div class="strategy-explanation">
+                    <div class="strategy-text">
+                        <h3>Moving Average Crossover with Volatility Filter</h3>
+                        <p>
+                            This bot implements a classic Moving Average Crossover strategy with an 
+                            added volatility filter to avoid trading during low-volatility periods.
+                        </p>
+                        
+                        <ul class="strategy-rules">
+                            <li><strong>Buy Signal:</strong> When the 5-period MA crosses above the 20-period MA and volatility is above threshold</li>
+                            <li><strong>Sell Signal:</strong> When the 5-period MA crosses below the 20-period MA and volatility is above threshold</li>
+                            <li><strong>No Trading:</strong> When market volatility is below the minimum threshold (currently <span id="min-vol-display">0.0002</span>)</li>
+                        </ul>
+                    </div>
                     
-                    <div class="logs-content">
-            <div id="logs-loading" class="loading" style="display:none;">Loading logs...</div>
-            <ul id="logs-list">
-                <li class="empty">Loading logs...</li>
-            </ul>
-        </div>
+                    <div class="strategy-diagram">
+                        <img src="https://placeholder.pics/svg/400x200/DEDEDE/555555/MA%20Crossover%20Strategy" alt="MA Crossover Strategy Diagram">
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="footer">
-        <p>Check your Slack channel for detailed trade actions and logs.</p>
+            <p>Check your Slack channel for detailed trade actions and logs.</p>
+            <button onclick="debugChartData()" style="font-size: 12px; padding: 4px 8px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; margin-top: 5px;">Debug Chart Data</button>
         </div>
     </div>
 </body>

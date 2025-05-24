@@ -7,6 +7,7 @@ This module connects to a real MCP server using the official Python SDK.
 import asyncio
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
+from orchestrator.integrations.slack import send_slack_message as slack_send
 
 MCP_SERVER_URL = "http://127.0.0.1:8000/mcp"
 
@@ -22,10 +23,8 @@ async def get_coin_price(symbol="BTC"):
             await session.initialize()
             result = await session.call_tool("get_coin_price", {"symbol": symbol})
             value = getattr(result.content, "text", result.content)
-            print("DEBUG: result.content =", result.content, "value =", value)
             return [symbol, value]
 
-def send_slack_message(message):
-    """Simulate sending a message to Slack via MCP (still a stub for demo)."""
-    print(f"Sent to Slack: {message}")
-    return True 
+def send_slack_message(message: str) -> bool:
+    """Send a message to Slack using the integrations module."""
+    return slack_send(message)
