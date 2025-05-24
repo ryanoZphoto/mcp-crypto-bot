@@ -38,8 +38,7 @@ mcp/
 
 ---
 
-## Environment Variables (`.env`)
-Copy `.env.example` to `.env` and fill in your secrets:
+
 
 ```
 binanceusdt_api_key=YOUR_BINANCE_API_KEY
@@ -84,7 +83,7 @@ MCP_SERVER_URL=http://127.0.0.1:8000/mcp
    ```sh
    pip install -r requirements.txt
    ```
-2. **Set up your `.env` file** (see above).
+2. **Set up your `.env` file** by copying `.env.example` and adding your secrets.
 3. **Start everything (Windows):**
    ```powershell
    ./start_all.ps1
