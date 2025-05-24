@@ -39,26 +39,27 @@ mcp/
 ---
 
 ## Environment Variables (`.env`)
-Create a `.env` file in the project root with the following:
+Copy `.env.example` to `.env` and fill in your secrets:
 
 ```
 binanceusdt_api_key=YOUR_BINANCE_API_KEY
 binanceusdt_api_secret=YOUR_BINANCE_API_SECRET
 
 # Slack Integration
-slack_webhook_url=https://hooks.slack.com/services/XXX/XXX/XXX
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXX/XXX/XXX
 # (Optional: for advanced Slack features)
-slack_bot_token=...
-slack_signing_secret=...
-slack_app_id=...
-slack_client_id=...
-slack_client_secret=...
-slack_verification_token=...
-slack_app_token=...
+SLACK_BOT_TOKEN=...
+SLACK_SIGNING_SECRET=...
+SLACK_APP_ID=...
+SLACK_CLIENT_ID=...
+SLACK_CLIENT_SECRET=...
+SLACK_VERIFICATION_TOKEN=...
+SLACK_APP_TOKEN=...
+MCP_SERVER_URL=http://127.0.0.1:8000/mcp
 ```
 
 - **binanceusdt_api_key / binanceusdt_api_secret**: Your Binance US API credentials.
-- **slack_webhook_url**: Your Slack Incoming Webhook URL for alerts/logs.
+- **SLACK_WEBHOOK_URL**: Your Slack Incoming Webhook URL for alerts/logs.
 
 ---
 
@@ -101,6 +102,14 @@ slack_app_token=...
 - **All bot actions, trades, and errors** are logged in memory and displayed in the dashboard (auto-refreshes every 10 seconds).
 - **Slack notifications**: Every log entry is also sent to your configured Slack channel.
 - **Logs are not persisted across restarts** (for persistent logging, extend to file or database).
+
+## Running Tests
+Install dependencies first, then execute the test suite with `pytest`:
+
+```sh
+pip install -r requirements.txt
+pytest
+```
 
 ---
 

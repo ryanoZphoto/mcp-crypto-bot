@@ -1,9 +1,12 @@
 __pycache__/
 *.pyc
 .env
+*.log
+/logs/
+meta mask.txt
 selenium_amazon.html
 node_modules/
 *.db
 .idea/
 .vscode/
-.DS_Store 
+.DS_Store

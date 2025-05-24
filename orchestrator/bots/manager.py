@@ -358,4 +358,4 @@ class TradingBot:
                 json.dump(bot_logs, f, indent=2)
             print(f"Logs saved to {filepath}")
         except Exception as e:
-            print(f"Error saving logs to file: {e}") 
+            print(f"Error saving logs to file: {e}")
