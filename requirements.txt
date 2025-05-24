@@ -1,0 +1,11 @@
+mcp[cli]
+fastapi
+uvicorn
+pydantic
+pytest
+python-dotenv
+psutil
+jinja2
+ccxt
+numpy
+requests 
