@@ -8,4 +8,4 @@ psutil
 jinja2
 ccxt
 numpy
-requests 
+requests

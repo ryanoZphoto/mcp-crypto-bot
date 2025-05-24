@@ -5,4 +5,4 @@ from .exchange import binance
 from .integrations import slack
 from .data import volatility
 from .strategies import moving_average
-from .bots import manager 
+from .bots import manager

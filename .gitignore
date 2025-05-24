@@ -1,14 +1,14 @@
 __pycache__/
 *.pyc
 .env
+.env.example
+README.md
+*.log
+/logs/
+meta mask.txt
 selenium_amazon.html
 node_modules/
 *.db
 .idea/
 .vscode/
 .DS_Store
-# Ignore log files and sensitive data
-*.log
-logs/
-bot_logs_*.json
-meta mask.txt
